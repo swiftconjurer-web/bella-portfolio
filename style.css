@@ -130,7 +130,7 @@ header {
         radial-gradient(circle at center, rgba(5, 6, 8, 0.15) 0%, rgba(5, 6, 8, 0.65) 100%),
         linear-gradient(to bottom, rgba(5, 6, 8, 0.1), rgba(5, 6, 8, 0.7)),
         url('timeline-bg.jpg.jpg') center/cover no-repeat;
-    filter: brightness(1.15) contrast(1.05); /* Brightness badha di hai */
+    filter: brightness(1.15) contrast(1.05);
     z-index: 1;
     pointer-events: none;
 }
@@ -223,26 +223,23 @@ header {
 }
 
 /* ================= ABOUT ME CARD ================= */
-/* About Section Card (Expanded Size + Subtle Glow) */
 .about-card {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
-    gap: 3rem !important; /* Increased spacing for expanded feel */
+    gap: 3rem !important;
     background: #0d0f14 !important;
     border: 1px solid rgba(255, 255, 255, 0.08) !important;
     border-radius: 18px !important;
-    padding: 2.8rem 2.6rem !important; /* Increased padding to make section larger */
+    padding: 2.8rem 2.6rem !important;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-/* Card Hover Glow */
 .about-card:hover {
     border-color: rgba(0, 242, 254, 0.2) !important;
     box-shadow: 0 10px 30px rgba(0, 242, 254, 0.05) !important;
 }
 
-/* Left Column Alignment */
 .profile-side {
     display: flex !important;
     flex-direction: column !important;
@@ -253,7 +250,6 @@ header {
     width: 160px !important;
 }
 
-/* Profile Avatar & Interactive Hover Glow */
 .profile-avatar-container {
     width: 160px !important;
     height: 160px !important;
@@ -284,7 +280,6 @@ header {
     image-rendering: -webkit-optimize-contrast !important;
 }
 
-/* Star Rating Style & Subtle Hover */
 .rating-block {
     display: flex !important;
     flex-direction: column !important;
@@ -317,7 +312,6 @@ header {
     letter-spacing: 0.5px !important;
 }
 
-/* Right Details Column */
 .about-details {
     flex: 1 !important;
     display: flex !important;
@@ -336,7 +330,6 @@ header {
     margin-bottom: 0 !important;
 }
 
-/* Interactive Glowing Skill Badges */
 .skills-grid {
     display: flex !important;
     flex-wrap: wrap !important;
@@ -356,7 +349,6 @@ header {
     cursor: pointer;
 }
 
-/* Skill Badge Hover Effect (Glowing Cursor Light) */
 .skill-badge:hover {
     background: rgba(0, 242, 254, 0.15) !important;
     border-color: #00f2fe !important;
@@ -365,19 +357,6 @@ header {
     transform: translateY(-2px) !important;
 }
 
-/* Mobile Screens Support */
-@media (max-width: 768px) {
-    .about-card {
-        flex-direction: column !important;
-        text-align: center !important;
-        padding: 2rem 1.5rem !important;
-        gap: 1.5rem !important;
-    }
-
-    .skills-grid {
-        justify-content: center !important;
-    }
-}
 /* ================= WORK GRID & SHORTS SLIDER ================= */
 .grid-longform {
     display: grid;
@@ -468,13 +447,12 @@ header {
 #contact {
     position: relative;
     text-align: center;
-    padding: 3rem 1.5rem 2.5rem 1.5rem; /* Heights aur size compact kar diya hai */
+    padding: 3rem 1.5rem 2.5rem 1.5rem;
     background: linear-gradient(180deg, #0b0c10 0%, #050608 100%);
     color: #ffffff;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Glowing Top Line */
 #contact::before {
     content: '';
     position: absolute;
@@ -501,7 +479,6 @@ header {
     line-height: 1.5;
 }
 
-/* Email Styling (Pehle jaisa simple text, bina box ke) */
 .email-highlight {
     margin-bottom: 1.5rem;
 }
@@ -525,7 +502,6 @@ header {
     font-size: 1.1rem;
 }
 
-/* Social Buttons Layout */
 .social-links {
     display: flex;
     justify-content: center;
@@ -559,7 +535,6 @@ header {
     transform: translateY(-3px);
 }
 
-/* Discord Custom Hover */
 .social-btn.discord:hover {
     background: #5865F2;
     border-color: #5865F2;
@@ -567,7 +542,6 @@ header {
     color: #ffffff;
 }
 
-/* Twitter/X Custom Hover */
 .social-btn.twitter:hover {
     background: #14171a;
     border-color: #ffffff;
@@ -575,3 +549,77 @@ header {
     color: #ffffff;
 }
 
+/* ==========================================================================
+   ONLY MOBILE / PHONE VIEW FIXES (Desktop view completely untouched)
+   ========================================================================== */
+@media screen and (max-width: 768px) {
+
+    /* FIX: Restore native touch behavior & hide custom cursor on mobile */
+    *, html, body, a, button {
+        cursor: auto !important;
+    }
+
+    .custom-cursor,
+    .cursor-dot {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    /* Adjust navbar & container padding on mobile */
+    .navbar {
+        padding: 1rem 1.2rem !important;
+    }
+
+    .nav-links {
+        gap: 1.2rem;
+    }
+
+    .section-container {
+        padding: 3.5rem 1.2rem !important;
+    }
+
+    /* Typing text & hero adjustments */
+    .typing-container {
+        font-size: 2rem !important;
+    }
+
+    .cursor-line {
+        height: 2rem !important;
+        width: 3px !important;
+    }
+
+    .subtitle {
+        font-size: 0.95rem !important;
+    }
+
+    /* Grid adjustment for mobile screens */
+    .grid-longform {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+
+    /* About section vertical alignment */
+    .about-card {
+        flex-direction: column !important;
+        text-align: center !important;
+        padding: 2rem 1.2rem !important;
+        gap: 1.5rem !important;
+    }
+
+    .skills-grid {
+        justify-content: center !important;
+    }
+
+    /* Contact buttons layout */
+    .social-links {
+        flex-direction: column !important;
+        width: 100% !important;
+    }
+
+    .social-btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+}
