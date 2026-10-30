@@ -1,6 +1,55 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 1. Typewriter Animation (Storytelling, Sound Design, Motion Graphics, etc.)
+    const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+
+    const IFRAME_ALLOW = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    let youtubePreconnected = false;
+
+    function preconnectYouTube() {
+        if (youtubePreconnected) return;
+        youtubePreconnected = true;
+        ["https://www.youtube.com", "https://www.google.com"].forEach(href => {
+            const link = document.createElement("link");
+            link.rel = "preconnect";
+            link.href = href;
+            document.head.appendChild(link);
+        });
+    }
+
+    function activateVideo(facade) {
+        const iframe = document.createElement("iframe");
+        iframe.src = `https://www.youtube.com/embed/${facade.dataset.id}?autoplay=1&rel=0`;
+        iframe.title = facade.dataset.title || "YouTube video";
+        iframe.allow = IFRAME_ALLOW;
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        iframe.allowFullscreen = true;
+        iframe.setAttribute("frameborder", "0");
+        facade.replaceWith(iframe);
+    }
+
+    document.querySelectorAll(".yt-facade").forEach(facade => {
+        const title = facade.dataset.title || "video";
+
+        const img = document.createElement("img");
+        img.src = `https://i.ytimg.com/vi/${facade.dataset.id}/hqdefault.jpg`;
+        img.alt = title;
+        img.loading = "lazy";
+        img.decoding = "async";
+
+        const play = document.createElement("span");
+        play.className = "yt-play";
+
+        facade.setAttribute("aria-label", `Play video: ${title}`);
+        facade.append(img, play);
+
+        facade.addEventListener("pointerenter", preconnectYouTube, { once: true });
+        facade.addEventListener("focus", preconnectYouTube, { once: true });
+        facade.addEventListener("click", () => activateVideo(facade), { once: true });
+    });
+
+
     const words = ["Storytelling", "Sound Design", "Motion Graphics", "Color Grading", "Video Editing"];
     let wordIndex = 0;
     let charIndex = 0;
@@ -11,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function typeEffect() {
         if (!textElement) return;
         const currentWord = words[wordIndex];
-        
+
         if (isDeleting) {
             textElement.textContent = currentWord.substring(0, charIndex - 1);
             charIndex--;
@@ -23,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let currentSpeed = isDeleting ? speed / 2 : speed;
 
         if (!isDeleting && charIndex === currentWord.length) {
-            currentSpeed = 2000; // Word type hone par 2 second ka hold
+            currentSpeed = 2000; 
             isDeleting = true;
         } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
@@ -36,39 +85,63 @@ document.addEventListener("DOMContentLoaded", () => {
 
     typeEffect();
 
-    // 2. High-Performance Ultra-Smooth Cursor Animation
+
     const cursor = document.querySelector(".custom-cursor");
     const cursorDot = document.querySelector(".cursor-dot");
 
-    let mouseX = 0, mouseY = 0;
-    let cursorX = 0, cursorY = 0;
+    if (isFinePointer && cursor && cursorDot) {
+        document.documentElement.classList.add("cursor-custom");
 
-    document.addEventListener("mousemove", (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+        let rafId = null;
+        let firstMove = true;
 
-        // Dot follows cursor instantaneously
-        if (cursorDot) {
-            cursorDot.style.left = `${mouseX}px`;
-            cursorDot.style.top = `${mouseY}px`;
+        const place = (el, x, y) => {
+            el.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+        };
+
+        function renderCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            place(cursor, cursorX, cursorY);
+
+            if (Math.abs(mouseX - cursorX) > 0.1 || Math.abs(mouseY - cursorY) > 0.1) {
+                rafId = requestAnimationFrame(renderCursor);
+            } else {
+                rafId = null; 
+            }
         }
-    });
 
-    // RequestAnimationFrame for Smooth Circle Interpolation
-    function renderCursor() {
-        cursorX += (mouseX - cursorX) * 0.15;
-        cursorY += (mouseY - cursorY) * 0.15;
+        document.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
 
-        if (cursor) {
-            cursor.style.left = `${cursorX}px`;
-            cursor.style.top = `${cursorY}px`;
-        }
+            if (firstMove) {
+                firstMove = false;
+                cursorX = mouseX;
+                cursorY = mouseY;
+                document.body.classList.add("cursor-visible");
+            }
 
-        requestAnimationFrame(renderCursor);
+            place(cursorDot, mouseX, mouseY);
+            if (!rafId) rafId = requestAnimationFrame(renderCursor);
+        }, { passive: true });
+
+        document.documentElement.addEventListener("mouseleave", () => {
+            document.body.classList.remove("cursor-visible");
+        });
+        document.documentElement.addEventListener("mouseenter", () => {
+            if (!firstMove) document.body.classList.add("cursor-visible");
+        });
+
+        const hoverSelector = ".card, .short-card, iframe, .btn-glow, a, .skill-badge, .yt-facade";
+        document.addEventListener("mouseover", (e) => {
+            document.body.classList.toggle("cursor-hover", !!e.target.closest(hoverSelector));
+        }, { passive: true });
     }
-    requestAnimationFrame(renderCursor);
 
-    // 3. Cursor Effect on Scroll
+
     let isScrollingTimer;
     window.addEventListener("scroll", () => {
         document.body.classList.add("is-scrolling");
@@ -77,79 +150,66 @@ document.addEventListener("DOMContentLoaded", () => {
         isScrollingTimer = setTimeout(() => {
             document.body.classList.remove("is-scrolling");
         }, 150);
-    });
+    }, { passive: true });
 
-    // 4. Cursor Hovering on Cards, Buttons, and Links
-    const interactiveElements = document.querySelectorAll(".card, .short-card, iframe, .btn-glow, a, .skill-badge");
+ 
+    const sliderContainer = document.querySelector(".shorts-slider-container");
+    if (!sliderContainer || reduceMotion) return;
 
-    interactiveElements.forEach(el => {
-        el.addEventListener("mouseenter", () => {
-            document.body.classList.add("cursor-hover");
-        });
-        el.addEventListener("mouseleave", () => {
-            document.body.classList.remove("cursor-hover");
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-    const sliderContainer = document.querySelector('.shorts-slider-container');
-    if (!sliderContainer) return;
-
-    let scrollSpeed = 1.2; // Slow & smooth speed (Aap speed kam/zyada kar sakte hain)
-    let direction = 1; // 1 = Right, -1 = Left
+    const scrollSpeed = 1.2; 
+    let direction = 1;       
     let isPaused = false;
+    let userEngaged = false; 
     let animationFrameId = null;
+    let pos = sliderContainer.scrollLeft;
 
-    // Auto Scroll Logic
     function autoScroll() {
-        if (!isPaused) {
-            sliderContainer.scrollLeft += scrollSpeed * direction;
+        if (!isPaused && !userEngaged) {
+           
+            if (Math.abs(sliderContainer.scrollLeft - pos) > 2) {
+                pos = sliderContainer.scrollLeft;
+            }
 
-            // Jab right end par pohnche toh direction left (-1) kar do
-            if (sliderContainer.scrollLeft + sliderContainer.clientWidth >= sliderContainer.scrollWidth - 1) {
+            const maxScroll = sliderContainer.scrollWidth - sliderContainer.clientWidth;
+            pos += scrollSpeed * direction;
+
+            if (pos >= maxScroll) {
+                pos = maxScroll;
                 direction = -1;
-            } 
-            // Jab bilkul start (left) par pohnche toh direction right (1) kar do
-            else if (sliderContainer.scrollLeft <= 0) {
+            } else if (pos <= 0) {
+                pos = 0;
                 direction = 1;
             }
+
+            sliderContainer.scrollLeft = pos;
         }
         animationFrameId = requestAnimationFrame(autoScroll);
     }
 
-    // Intersection Observer: Jab user scroll karke section tak pohnche tabhi auto-slide chalayega
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 if (!animationFrameId) {
+                    pos = sliderContainer.scrollLeft;
                     animationFrameId = requestAnimationFrame(autoScroll);
                 }
-            } else {
-                if (animationFrameId) {
-                    cancelAnimationFrame(animationFrameId);
-                    animationFrameId = null;
-                }
+            } else if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
             }
         });
     }, { threshold: 0.2 });
 
     observer.observe(sliderContainer);
 
-    // Pause on Hover / Touch / Click (Jab user kisi video par aaye ya click kare)
-    sliderContainer.addEventListener('mouseenter', () => { isPaused = true; });
-    sliderContainer.addEventListener('mouseleave', () => { isPaused = false; });
-    sliderContainer.addEventListener('touchstart', () => { isPaused = true; }, { passive: true });
-    sliderContainer.addEventListener('touchend', () => { isPaused = false; });
+    // Pause on Hover / Touch
+    sliderContainer.addEventListener("mouseenter", () => { isPaused = true; });
+    sliderContainer.addEventListener("mouseleave", () => { isPaused = false; });
+    sliderContainer.addEventListener("touchstart", () => { isPaused = true; }, { passive: true });
+    sliderContainer.addEventListener("touchend", () => { isPaused = false; }, { passive: true });
 
-    // Prevent jump during user manual drag/scroll
-    sliderContainer.addEventListener('scroll', () => {
-        // Keeps boundary detection smooth during manual scroll
-        if (sliderContainer.scrollLeft + sliderContainer.clientWidth >= sliderContainer.scrollWidth - 1) {
-            direction = -1;
-        } else if (sliderContainer.scrollLeft <= 0) {
-            direction = 1;
-        }
+    sliderContainer.addEventListener("click", (e) => {
+        if (e.target.closest(".yt-facade")) userEngaged = true;
     });
 });
-
