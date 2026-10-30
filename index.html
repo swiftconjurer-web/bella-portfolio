@@ -4,6 +4,311 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Editor & Visual Artist | Portfolio</title>
+
+    <!-- PERF: connections to the hosts we need are opened early -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://i.ytimg.com">
+    <!-- PERF: hero background starts downloading immediately -->
+    <link rel="preload" as="image" href="timeline-bg.jpg.jpg" fetchpriority="high">
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- PERF: Font Awesome no longer blocks first paint -->
+    <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"></noscript>
+</head>
+<body>
+
+    <!-- Smooth Custom Mouse Cursor -->
+    <div class="custom-cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">PORTFOLIO</div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Me</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <header id="home">
+        <div class="timeline-bg-overlay"></div>
+
+        <div class="hero-content">
+            <p class="tagline">PROFESSIONAL VIDEO EDITOR</p>
+            <h1 class="typing-container">
+                <span id="typewriter-text"></span><span class="cursor-line">&nbsp;</span>
+            </h1>
+            <p class="subtitle">High-Impact Visuals • Dynamic Cuts • Premium Color Grading</p>
+            <a href="#work" class="btn-glow">Explore Work</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- About Me Section -->
+        <section id="about" class="section-container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-card">
+
+                <div class="profile-side">
+                    <div class="profile-avatar-container">
+                        <img src="profile.jpg" alt="Profile Photo" class="avatar-img" width="160" height="160" loading="lazy" decoding="async">
+                    </div>
+
+                    <div class="rating-block">
+                        <div class="stars">
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-solid fa-star"></i>
+                            <i class="fa-regular fa-star"></i>
+                        </div>
+                        <span class="rating-text">4.0 / 5.0 Rating</span>
+                    </div>
+                </div>
+
+                <div class="about-details">
+                    <div class="about-text">
+                        <!-- FIX: <h3> inside <p> is invalid HTML; the <p> wrapper was removed -->
+                        <h3>I am a passionate Video Editor and Visual Content Creator | 4 years exp 1| specializing in narrative storytelling, fast-paced commercial cuts, motion graphics, and high-converting short-form content.</h3>
+                        <p>Hello, myself bellaryan call me 𝐒𝐰𝐢𝐟𝐭_𝐂𝐨𝐧𝐣𝐮𝐫𝐞𝐫. I offer high-quality video editing services both for short-form and long-form videos. I work with all different kinds of documentary and gaming niches, but I am very versatile and work with many different niches such as Instagram marketing, YouTube automation shorts, GFX thumbnail-designing etc.</p>
+                    </div>
+                    <div class="skills-grid">
+                        <span class="skill-badge">Adobe Premiere Pro</span>
+                        <span class="skill-badge">After Effects</span>
+                        <span class="skill-badge">DaVinci Resolve</span>
+                        <span class="skill-badge">Sound Design</span>
+                        <span class="skill-badge">Color Grading</span>
+                        <span class="skill-badge">Motion Graphics</span>
+                        <span class="skill-badge">Thumbnail Design</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    
+        <section id="work" class="section-container">
+            <h2 class="section-title">Featured Work</h2>
+
+            <div class="work-subsection">
+                <h3 class="subsection-title">Long-Form Videos</h3>
+                <p class="section-desc">YouTube Videos, Documentaries & Gaming (16:9)</p>
+
+                <div class="grid-longform">
+                    <div class="card longform-card">
+                        <div class="video-wrapper ratio-16-9">
+                            <button type="button" class="yt-facade" data-id="wYnjkpeIubw" data-title="Cinematic Documentary Edit"></button>
+                        </div>
+                        <div class="card-info">
+                            <h3>Documentary Edit</h3>
+                            <p>Storytelling with narrative pacing and audio layering.</p>
+                        </div>
+                    </div>
+
+                    <div class="card longform-card">
+                        <div class="video-wrapper ratio-16-9">
+                            <button type="button" class="yt-facade" data-id="3F-p8wVOdaA" data-title="Commercial Brand Video"></button>
+                        </div>
+                        <div class="card-info">
+                            <h3>COD-Zombie Gaming Edit</h3>
+                            <p>High-energy sync cuts with kinetic text and VFX.</p>
+                        </div>
+                    </div>
+
+                    <div class="card longform-card">
+                        <div class="video-wrapper ratio-16-9">
+                            <button type="button" class="yt-facade" data-id="qDVFhU9yR_M" data-title="YouTube Video Edit 3"></button>
+                        </div>
+                        <div class="card-info">
+                            <h3>Podcast Edit</h3>
+                            <p>Multi-cam switching with clean audio and overlays.</p>
+                        </div>
+                    </div>
+
+                    <div class="card longform-card">
+                        <div class="video-wrapper ratio-16-9">
+                            <button type="button" class="yt-facade" data-id="P3jKN30vU88" data-title="YouTube Video Edit 4"></button>
+                        </div>
+                        <div class="card-info">
+                            <h3>Anime Edit with After Effects</h3>
+                            <p>High-energy visual opener with After Effects.</p>
+                        </div>
+                    </div>
+
+                    <div class="card longform-card">
+                        <div class="video-wrapper ratio-16-9">
+                            <button type="button" class="yt-facade" data-id="Y-oSuPtpj_w" data-title="YouTube Video Edit 5"></button>
+                        </div>
+                        <div class="card-info">
+                            <h3>Minecraft Edit</h3>
+                            <p>Smooth transitions, text animation, and fun SFX.</p>
+                        </div>
+                    </div>
+
+                    <div class="card longform-card">
+                        <div class="video-wrapper ratio-16-9">
+                            <button type="button" class="yt-facade" data-id="GnnmOwddJSE" data-title="YouTube Video Edit 6"></button>
+                        </div>
+                        <div class="card-info">
+                            <h3>Color Grading Before/After</h3>
+                            <p>Cinematic color pass for raw footage enhancement.</p>
+                        </div>
+                    </div>
+
+                    <div class="card longform-card">
+                        <div class="video-wrapper ratio-16-9">
+                            <button type="button" class="yt-facade" data-id="6KGcxAzZTtQ" data-title="YouTube Video Edit 7"></button>
+                        </div>
+                        <div class="card-info">
+                            <h3>Automotive Walkthrough</h3>
+                            <p>Dynamic speed ramps and engine sound design.</p>
+                        </div>
+                    </div>
+
+                    <div class="card longform-card">
+                        <div class="video-wrapper ratio-16-9">
+                            <button type="button" class="yt-facade" data-id="Rtd4uwEIu8o" data-title="YouTube Video Edit 8"></button>
+                        </div>
+                        <div class="card-info">
+                            <h3>Talking Head</h3>
+                            <p>Fast informational edit with zooms and B-roll.</p>
+                        </div>
+                    </div>
+
+                    <div class="card longform-card">
+                        <div class="video-wrapper ratio-16-9">
+                            <button type="button" class="yt-facade" data-id="E9FvQCCDI9w" data-title="YouTube Video Edit 9"></button>
+                        </div>
+                        <div class="card-info">
+                            <h3>Horror</h3>
+                            <p>Atmospheric suspense with dark tones and SFX.</p>
+                        </div>
+                    </div>
+
+                    <div class="card longform-card">
+                        <div class="video-wrapper ratio-16-9">
+                            <button type="button" class="yt-facade" data-id="MefMq14l0ck" data-title="YouTube Video Edit 10"></button>
+                        </div>
+                        <div class="card-info">
+                            <h3>Crime</h3>
+                            <p>Investigative storytelling with dramatic audio.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Short-Form Moving Slider Section -->
+            <div class="work-subsection" style="margin-top: 4rem;">
+                <h3 class="subsection-title">Reels & Short-Form</h3>
+                <p class="section-desc">Scroll horizontally for vertical 9:16 edits</p>
+
+                <div class="shorts-slider-container">
+                    <div class="shorts-track">
+                        <div class="short-card">
+                            <div class="video-wrapper ratio-9-16">
+                                <button type="button" class="yt-facade" data-id="VfKnSUeTAKo" data-title="Fast Transition Reel"></button>
+                            </div>
+                            <h4>BMW Cinematic</h4>
+                        </div>
+
+                        <div class="short-card">
+                            <div class="video-wrapper ratio-9-16">
+                                <button type="button" class="yt-facade" data-id="p3Xizgmhn4s" data-title="Motion Graphics Short"></button>
+                            </div>
+                            <h4>Product Ad</h4>
+                        </div>
+
+                        <div class="short-card">
+                            <div class="video-wrapper ratio-9-16">
+                                <button type="button" class="yt-facade" data-id="jtm5qGp9h_Y" data-title="Talking Head Engagement"></button>
+                            </div>
+                            <h4>Roblox</h4>
+                        </div>
+
+                        <div class="short-card">
+                            <div class="video-wrapper ratio-9-16">
+                                <button type="button" class="yt-facade" data-id="dkuVo3trXZU" data-title="Color Grading Reel"></button>
+                            </div>
+                            <h4>Geography</h4>
+                        </div>
+
+                        <div class="short-card">
+                            <div class="video-wrapper ratio-9-16">
+                                <button type="button" class="yt-facade" data-id="47lTBk5cHE8" data-title="Short Form Edit 5"></button>
+                            </div>
+                            <h4>Fast-Pace Gaming</h4>
+                        </div>
+
+                        <div class="short-card">
+                            <div class="video-wrapper ratio-9-16">
+                                <button type="button" class="yt-facade" data-id="MJZ9y7R_dnw" data-title="Short Form Edit 6"></button>
+                            </div>
+                            <h4>Brand Engagement</h4>
+                        </div>
+
+                        <div class="short-card">
+                            <div class="video-wrapper ratio-9-16">
+                                <button type="button" class="yt-facade" data-id="fu1MQv8vyo0" data-title="Short Form Edit 7"></button>
+                            </div>
+                            <h4>Storytelling</h4>
+                        </div>
+
+                        <div class="short-card">
+                            <div class="video-wrapper ratio-9-16">
+                                <button type="button" class="yt-facade" data-id="Ji4NOZrbey0" data-title="Short Form Edit 8"></button>
+                            </div>
+                            <h4>Marketing</h4>
+                        </div>
+
+                        <div class="short-card">
+                            <div class="video-wrapper ratio-9-16">
+                                <button type="button" class="yt-facade" data-id="N7g-wktMdZ4" data-title="Short Form Edit 9"></button>
+                            </div>
+                            <h4>Animated Flyer</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer / Contact Section -->
+    <footer id="contact">
+        <!-- FIX: deprecated <center> removed (#contact already centers text in CSS) -->
+        <h2>Let's Work Together</h2>
+        <p>Available for freelance projects, brand collaborations, and remote video editing roles.</p>
+
+        <p class="email-highlight">
+            <a href="mailto:swiftconjurer@gmail.com">
+                <i class="fa-solid fa-envelope"></i> swiftconjurer@gmail.com
+            </a>
+        </p>
+
+        <div class="social-links">
+            <a href="https://discord.com/users/1367380408211210302" target="_blank" rel="noopener noreferrer" class="social-btn discord">
+                <i class="fa-brands fa-discord"></i>
+                <span>Discord: bellaryan425</span>
+            </a>
+
+            <a href="https://x.com/BellaRyan268742" target="_blank" rel="noopener noreferrer" class="social-btn twitter">
+                <i class="fa-brands fa-x-twitter"></i>
+                <span>Twitter (X) : BellaRyan268742</span>
+            </a>
+        </div>
+    </footer>
+
+    <!-- PERF: defer = script no longer blocks HTML parsing -->
+    <script src="script.js" defer></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Editor & Visual Artist | Portfolio</title>
     <link rel="stylesheet" href="style.css">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
