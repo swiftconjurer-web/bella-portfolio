@@ -849,6 +849,50 @@ header::after {
         scroll-padding-top: 70px;
     }
 
+    /* FIX (mobile scroll): page ke end/start par bounce, pull-to-refresh
+       aur slider ki side-swipe se page dobara start hone se rokta hai */
+    html, body {
+        overscroll-behavior-y: none;
+    }
+
+    header {
+        min-height: 100vh;
+        min-height: 100svh; /* address bar upar-neeche hone se hero ki height na kude */
+    }
+
+    .shorts-slider-container {
+        overscroll-behavior-x: contain; /* slider ki swipe se browser back/forward na ho */
+        -webkit-mask-image: none;
+        mask-image: none; /* auto-scroll ke saath har frame par repaint hota tha */
+    }
+
+    /* Phone par bhaari effects band: kam memory, smooth scroll */
+    .section-title,
+    .subsection-title,
+    .about-card,
+    .card,
+    .shorts-slider-container {
+        animation: none !important;
+    }
+
+    .navbar,
+    .social-btn {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .navbar {
+        background: rgba(5, 6, 8, 0.95);
+    }
+
+    .timeline-bg-overlay {
+        filter: none;
+    }
+
+    body::before {
+        display: none;
+    }
+
     .custom-cursor,
     .cursor-dot {
         display: none !important;
