@@ -3,7 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const isFinePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-
+    /* ======================================================================
+       0. PERF: YouTube click-to-load facades (unchanged)
+       ====================================================================== */
     const IFRAME_ALLOW = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     let youtubePreconnected = false;
 
@@ -49,13 +51,20 @@ document.addEventListener("DOMContentLoaded", () => {
         facade.addEventListener("click", () => activateVideo(facade), { once: true });
     });
 
-
+    /* ======================================================================
+       1. Typewriter Animation (logic same)
+       PERF: jab hero screen se bahar ho (neeche scroll kiya) to typing ruk jati hai
+       aur wapas aane par wahin se chalti hai. Pehle ye hero ko har 60-120ms par
+       dobara paint karti rehti thi, chahe user footer tak pohanch gaya ho.
+       ====================================================================== */
     const words = ["Storytelling", "Sound Design", "Motion Graphics", "Color Grading", "Video Editing"];
     let wordIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
     const speed = 120;
     const textElement = document.getElementById("typewriter-text");
+    let typingTimer = null;
+    let heroVisible = true;
 
     function typeEffect() {
         if (!textElement) return;
@@ -72,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let currentSpeed = isDeleting ? speed / 2 : speed;
 
         if (!isDeleting && charIndex === currentWord.length) {
-            currentSpeed = 2000; 
+            currentSpeed = 2000; // Word type hone par 2 second ka hold
             isDeleting = true;
         } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
@@ -80,12 +89,22 @@ document.addEventListener("DOMContentLoaded", () => {
             currentSpeed = 500;
         }
 
-        setTimeout(typeEffect, currentSpeed);
+        typingTimer = heroVisible ? setTimeout(typeEffect, currentSpeed) : null;
     }
 
     typeEffect();
 
+    const heroEl = document.getElementById("home");
+    if (heroEl && "IntersectionObserver" in window) {
+        new IntersectionObserver((entries) => {
+            heroVisible = entries[0].isIntersecting;
+            if (heroVisible && !typingTimer) typeEffect();
+        }).observe(heroEl);
+    }
 
+    /* ======================================================================
+       2. Custom Cursor (sirf mouse wali devices par, logic same)
+       ====================================================================== */
     const cursor = document.querySelector(".custom-cursor");
     const cursorDot = document.querySelector(".cursor-dot");
 
@@ -109,7 +128,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (Math.abs(mouseX - cursorX) > 0.1 || Math.abs(mouseY - cursorY) > 0.1) {
                 rafId = requestAnimationFrame(renderCursor);
             } else {
-                rafId = null; 
+                rafId = null;
             }
         }
 
@@ -141,7 +160,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }, { passive: true });
     }
 
-
+    /* ======================================================================
+       3. Cursor Effect on Scroll (same)
+       ====================================================================== */
     let isScrollingTimer;
     window.addEventListener("scroll", () => {
         document.body.classList.add("is-scrolling");
@@ -152,20 +173,48 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 150);
     }, { passive: true });
 
- 
+    /* ======================================================================
+       4. DEBUG PANEL (sirf tab dikhta hai jab link ke aakhir mein ?debug lage)
+       Normal visitors ko kabhi nazar nahi aata.
+       loads = kitni baar page load hua (agar scroll ke baad 2 ho gaya to page
+       asal mein dobara load hua tha), docH = poore page ki lambai.
+       ====================================================================== */
+    if (/[?&]debug\b/.test(location.search)) {
+        let loads = 0;
+        try {
+            loads = (Number(sessionStorage.getItem("dbgLoads")) || 0) + 1;
+            sessionStorage.setItem("dbgLoads", String(loads));
+        } catch (e) { /* storage band ho to ignore */ }
+
+        const navType = (performance.getEntriesByType("navigation")[0] || {}).type || "?";
+        const box = document.createElement("div");
+        box.style.cssText = "position:fixed;left:6px;bottom:6px;z-index:2147483647;background:rgba(0,0,0,.85);color:#0f0;font:11px/1.4 monospace;padding:6px 8px;border-radius:6px;pointer-events:none;max-width:92vw";
+        document.body.appendChild(box);
+
+        const showDebug = () => {
+            const d = document.documentElement;
+            box.textContent = `loads:${loads} nav:${navType} y:${Math.round(window.scrollY)} vh:${window.innerHeight} docH:${d.scrollHeight} headers:${document.querySelectorAll("header").length}`;
+        };
+        showDebug();
+        window.addEventListener("scroll", showDebug, { passive: true });
+        window.addEventListener("resize", showDebug);
+    }
+
+    /* ======================================================================
+       5. Shorts auto-slider (same)
+       ====================================================================== */
     const sliderContainer = document.querySelector(".shorts-slider-container");
     if (!sliderContainer || reduceMotion) return;
 
-    const scrollSpeed = 1.2; 
-    let direction = 1;       
+    const scrollSpeed = 1.2; // Slow & smooth speed
+    let direction = 1;       // 1 = Right, -1 = Left
     let isPaused = false;
-    let userEngaged = false; 
+    let userEngaged = false; // video play karne ke baad slider dobara nahi chalega
     let animationFrameId = null;
     let pos = sliderContainer.scrollLeft;
 
     function autoScroll() {
         if (!isPaused && !userEngaged) {
-           
             if (Math.abs(sliderContainer.scrollLeft - pos) > 2) {
                 pos = sliderContainer.scrollLeft;
             }
@@ -185,7 +234,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         animationFrameId = requestAnimationFrame(autoScroll);
     }
-
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
